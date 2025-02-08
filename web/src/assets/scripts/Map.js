@@ -14,7 +14,7 @@ export class Map extends GameObject{
         this.walls = [];
         this.snakes = [
             new snake({id:0, color:"#4876EC", r:this.rows - 2, c:1}, this),
-            new snake({id:1, color:"#F94848", r:1, c:this.cols - 2}, this)
+            new snake({id:1, color:"#F94848", r:1, c:this.cols - 2}, this),
         ];
     }
 
@@ -32,18 +32,14 @@ export class Map extends GameObject{
         this.ctx.canvas.height = this.L * this.rows;
     }
 
-    snakes_move(){  //状态检查合法后开始移动
-        if (this.check_move()){
-            for (const snake of this.snakes){
-                snake.next_step();
-            }
-        }
-    }
-
     update()
     {
         this.update_size();
-        this.snakes_move();
+        
+        if (this.check_move()) {
+            this.next_step();
+        }
+
         this.render();
     }
 
@@ -115,7 +111,8 @@ export class Map extends GameObject{
 
     check_move(){  //两条蛇是否可以行进
         for (const snake of this.snakes){
-            if (snake.direction === -1 || snake.status !== 'still') return false;
+            if (snake.direction === -1 || snake.status !== 'still') 
+                return false;
         }
 
         return true;
@@ -127,7 +124,6 @@ export class Map extends GameObject{
 
         const [snake0, snake1] = this.snakes;
         this.ctx.canvas.addEventListener("keydown", (e) => {
-            // 阻止方向键的默认行为
             const arrowKeys = ['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
             if (arrowKeys.includes(e.key)) {
                 e.preventDefault();
@@ -174,6 +170,13 @@ export class Map extends GameObject{
         }
         return false;
     }
+
+    next_step() {  // 让两条蛇进入下一回合
+        for (const snake of this.snakes) {
+            snake.next_step();
+        }
+    }
+
 
     
 }

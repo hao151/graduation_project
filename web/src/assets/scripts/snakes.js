@@ -53,7 +53,7 @@ export class snake extends GameObject{
             this.body[0].y += move_distance * dy / distance;
 
             if (!this.check_tail()){
-                const k = this.body.length;
+                const k = this.body.length; 
                 const tail = this.body[k - 1], tail_target = this.body[k - 2];
                 const tail_dx = tail_target.x - tail.x;
                 const tail_dy = tail_target.y - tail.y;
@@ -64,7 +64,9 @@ export class snake extends GameObject{
     }
 
     update(){
-        if (this.status === 'move') this.update_move();
+        if (this.status === 'move') 
+            this.update_move();
+        
         this.render();
     }
 
@@ -109,9 +111,9 @@ export class snake extends GameObject{
     next_step(){
         const d = this.direction;
         this.next_body = new body(this.body[0].r + this.dr[d], this.body[0].c + this.dc[d]);
-        this.status = 'move'; //更新状态
         this.eye_direction = d;
         this.direction = -1;  //重置方向
+        this.status = 'move'; //更新状态
         this.steps ++ ;
 
         const k = this.body.length;
