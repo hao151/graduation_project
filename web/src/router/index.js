@@ -4,6 +4,8 @@ import PkIndexView from '../views/pk/PkIndexView.vue'
 import RankListView from '../views/ranklist/RankListView.vue'
 import RecordView from '../views/record/RecordView.vue'
 import UserBotView from '../views/user/mybot/UserBotView.vue'
+import UserAccountLogin from '@/views/user/account/UserAccountLogin.vue'
+import UserAccountRegister from '@/views/user/account/UserAccountRegister.vue'
 
 const routes = [
   {
@@ -34,6 +36,18 @@ const routes = [
     path:"/user/bot/",
     name:"user_bot_index",
     component:UserBotView,
+  },
+
+  {
+    path:"/user/account/login",
+    name:"user_account_login",
+    component:UserAccountLogin,
+  },
+
+  {
+    path:"/user/account/register",
+    name:"user_account_register",
+    component:UserAccountRegister,
   },
 
   {

@@ -7,4 +7,7 @@
 pojo mapper(dao）service controller
 springboot 和client 通信（打开网页） 4.1    1'09
 通过数据库判断user&password   1'23
-JWT工作原理
+JWT工作原理 vs SessionID   access refresh
+公开url，登录url---安全机制
+securityconfig 版本
+token放到localstory中防止刷新退出
