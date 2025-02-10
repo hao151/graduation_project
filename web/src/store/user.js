@@ -6,7 +6,8 @@ export default{
         username:"",
         photo:"",
         token:"",
-        is_login:false
+        is_login:false,
+        loadding_info:true,
     },
     getters: {
     },
@@ -26,6 +27,9 @@ export default{
             state.photo = "";
             state.token = "";
             state.is_login = false;
+        },
+        update_loaddinginfo(state, loadding_info){
+            state.loadding_info = loadding_info;
         }
     },
     actions: {
@@ -39,6 +43,7 @@ export default{
                 },
                 success(resp){
                     if(resp.error_message === 'success'){
+                        localStorage.setItem("jwt_token", resp.token);
                         context.commit("updateToken", resp.token);
                         data.success(resp);
                     }
@@ -77,8 +82,9 @@ export default{
             })
         },
         logout(context){
+            localStorage.removeItem("jwt_token");
             context.commit("logout");
-        }
+        },
     },
     modules: {
     }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CommonContent>
+        <CommonContent v-if="!$store.state.user.loadding_info">
             <div class="row justify-content-md-center">
                 <div class="col-3">
                     <form @submit.prevent="login">
@@ -38,6 +38,22 @@ export default{
         let password = ref('');
         let error_message = ref('');
 
+        const jwt_token = localStorage.getItem("jwt_token");
+        if (jwt_token){
+            store.commit("updateToken", jwt_token);
+            store.dispatch("getinfo", {
+                success(){
+                    router.push({name:"home"});
+                    store.commit("update_loaddinginfo", false);
+                },
+                error(){
+                    store.commit("update_loaddinginfo", false);
+                }
+            })
+        }else{
+            store.commit("update_loaddinginfo", false);
+        }
+
         const login = ()=>{
             error_message.value = "";
             store.dispatch("login", {
@@ -47,7 +63,6 @@ export default{
                     store.dispatch("getinfo", {
                         success(){
                             router.push({name: 'home'});
-                            console.log(store.state.user);
                         }
                     })
                    
