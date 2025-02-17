@@ -7,12 +7,16 @@
 <script>
 import { Map }from "@/assets/scripts/Map.js"
 import { onMounted, ref } from 'vue'
+import {useStore} from 'vuex'
+
 export default {
+    
     setup() {
+        const store = useStore();
         let parent = ref(null);
         let canvas = ref(null);
         onMounted(()=>{
-            new Map(canvas.value.getContext('2d'), parent.value)
+            new Map(canvas.value.getContext('2d'), parent.value, store)
         });
 
         return {

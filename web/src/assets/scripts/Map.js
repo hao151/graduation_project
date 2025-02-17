@@ -3,11 +3,12 @@ import { snake } from "./snakes.js";
 import { Wall } from './wall.js';
 
 export class Map extends GameObject{
-    constructor(ctx, parent){
+    constructor(ctx, parent, store){
         super();
 
         this.ctx = ctx;
         this.parent = parent;
+        this.store = store;
         this.L = 0;
         this.rows = 13;
         this.cols = 14;
@@ -19,10 +20,7 @@ export class Map extends GameObject{
     }
 
     start(){
-        for (let i = 0; i < 100; i ++ ){
-            if(this.create_walls()) break;
-        }
-        
+        this.create_walls()
         this.add_listening_events();
     }
 
@@ -59,42 +57,9 @@ export class Map extends GameObject{
                 this.ctx.fillRect(c * this.L, r * this.L, this.L, this.L);
             }
         }
-
     }
-
     create_walls(){
-        const g = [];
-        for (let r = 0; r < this.rows; r ++ ){
-            g[r] = [];
-            for (let c = 0; c < this.cols; c ++ ){
-                g[r][c] = false;
-            }
-        }
-
-        for (let r = 0; r < this.rows; r ++ )
-        {
-            for (let c = 0; c < this.cols; c ++ )
-            {
-                if (c == 0 || r == 0 || c == this.cols - 1 || r == this.rows - 1){
-                    g[r][c] = true;
-                }
-            }
-        }
-
-        for (let cnt = 0; cnt < 26 / 2; cnt ++ ){
-            for (let i = 0; i < 1000; i ++ ){
-                let r = parseInt(Math.random() * this.rows);
-                let c = parseInt(Math.random() * this.cols);
-                if (g[r][c] || g[this.rows - 1 - r][this.cols - 1 - c]) continue; 
-                if(r == this.rows - 2 && c == 1 || c == this.cols - 2 && r == 1) continue;
-                g[r][c] = g[this.rows - 1 - r][this.cols - 1 - c] = true;
-                break;
-            }
-        }
-
-        const copy = JSON.parse(JSON.stringify(g));
-        if (!this.is_connective(copy, this.rows - 2, 1, 1, this.cols - 2))
-            return false;
+        const g = this.store.state.pk.gamemap;
 
         for (let r = 0; r < this.rows; r ++ )
         {
@@ -159,17 +124,7 @@ export class Map extends GameObject{
         return false;
     }
 
-    is_connective(g, sx, sy, tx, ty){
-        if (sx == tx && sy == ty) return true;
-        g[sx][sy] = true;
-        let dx = [-1, 0, 1, 0], dy = [0, 1, 0, -1];
-        for (let i = 0; i < 4; i ++ ){
-            let x = sx + dx[i], y = sy + dy[i];
-            if (!g[x][y] && this.is_connective(g, x, y, tx, ty))
-                return true;
-        }
-        return false;
-    }
+
 
     next_step() {  // 让两条蛇进入下一回合
         for (const snake of this.snakes) {
