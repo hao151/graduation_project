@@ -16,7 +16,8 @@ export default {
         let parent = ref(null);
         let canvas = ref(null);
         onMounted(()=>{
-            new Map(canvas.value.getContext('2d'), parent.value, store)
+            store.commit("updateGameObject", 
+            new Map(canvas.value.getContext('2d'), parent.value, store))
         });
 
         return {

@@ -120,10 +120,6 @@ export class snake extends GameObject{
         for (let i = k; i > 0; i -- ){
             this.body[i] = JSON.parse(JSON.stringify(this.body[i - 1]));
         }
-
-        if (this.gamemap.check_over(this.next_body)){
-            this.status = 'die';
-        }
     }
 
     set_direction(d){
