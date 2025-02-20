@@ -1,7 +1,7 @@
 <template>
     <div class="matchground">
         <div class="row">
-            <div class="col-6">
+            <div class="col-4">
                 <div class="user-photo">
                     <img :src="$store.state.user.photo" alt="">
                 </div>
@@ -10,7 +10,18 @@
                 </div>
             </div>
 
-            <div class="col-6">
+            <div class="col-4">
+                <div class="user-select-bot">
+                    <div style="text-align: center; font-size: 24px; color: black; font-weight: 600;">请选择出战英雄</div>
+                    <select v-model="select_bot" class="form-select" aria-label="Default select example">
+                    <option value="-1" selected>亲自出战</option>
+                    <option v-for="bot in bots" :key="bot.id" :value="bot.id">{{ bot.botName }}</option>
+
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-4">
                 <div class="user-photo">
                     <img :src="$store.state.pk.opponent_photo" alt="">
                 </div>
@@ -32,18 +43,22 @@
 <script>
 import {ref} from 'vue'
 import {useStore} from 'vuex'
+import $ from 'jquery'
 
 export default{
     setup(){
 
         const store = useStore();
         let match_btn_info = ref('匹配');
+        let bots = ref([]);
+        let select_bot = ref("-1");
 
         const click_match_btn =()=>{
             if (match_btn_info.value === '匹配'){
                 match_btn_info.value = '取消';
                 store.state.pk.socket.send(JSON.stringify({
                     event:"start-matching",
+                    bot_id:select_bot.value,
                 }));   
             }
             else if(match_btn_info.value === '取消'){
@@ -53,9 +68,27 @@ export default{
                 }));   
             }
         }
+
+        const get_bots = ()=>{
+            $.ajax({
+                url:'http://127.0.0.1:3000/user/bot/getlist/',
+                type:"get",
+                headers:{
+                    Authorization: "Bearer " + store.state.user.token,
+                },
+                success(resp){
+                    bots.value = resp;
+                }
+            })
+        }
+
+        get_bots();
+
         return{
         match_btn_info,
-        click_match_btn
+        click_match_btn,
+        bots,
+        select_bot,
     }
     }
 
@@ -90,6 +123,14 @@ div.user-username{
     font-weight: 600;
     margin-top: 3vh;
     color:white;
+}
+
+div.user-select-bot{
+    margin-top: 20vh;
+}
+div.div.user-select-bot > select{
+    width:60%;
+    margin:0 auto;
 }
 
 </style>

@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user/account/token/", "/user/account/register/").permitAll()
                         .requestMatchers(new IpAddressMatcher("127.0.0.1", "/pk/start/game/")).permitAll()
+                        .requestMatchers(new IpAddressMatcher("127.0.0.1", "/pk/receive/bot/move/")).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyRequest().authenticated());
 
