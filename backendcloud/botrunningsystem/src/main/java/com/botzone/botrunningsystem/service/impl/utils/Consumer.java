@@ -36,6 +36,7 @@ public class Consumer extends Thread {
     private String addUid(String code, String uid) {
          int k = code.indexOf(" implements com.botzone.botrunningsystem.utils.BotInterface");
          return code.substring(0, k) + uid + code.substring(k);
+
     }
 
     @Override
@@ -46,7 +47,7 @@ public class Consumer extends Thread {
                 "com.botzone.botrunningsystem.utils.Bot" + uid,
                 addUid(bot.getBotCode(), uid)).create().get();
 
-        Integer direction = botInterface.nextMove(bot.getBotCode());
+        Integer direction = botInterface.nextMove(bot.getInput());
 
         System.out.println("move-direction:" + bot.getUserId() + " " + direction);
 

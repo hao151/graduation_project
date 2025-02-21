@@ -126,19 +126,18 @@ public class Game extends Thread {
 
         return mapToString() + "#" +
                 me.getSx() + "#" +
-                me.getSy() + "#" +
-                me.getSx() + "#" +
-                "(" + me.stepsToString() + ")#" +
-                you.getSy() + "#" +
-                you.getSy() + "#" +
-                "(" + you.stepsToString() + ")#";
+                me.getSy() + "#(" +
+                me.stepsToString() + ")#" +
+                you.getSx() + "#" +
+                you.getSy() + "#(" +
+                you.stepsToString() + ")";
     }
 
     private void sendBotCode(Player player){
         if (player.getBotId().equals(-1)) return;
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
-        data.add("userId", player.getId().toString());
-        data.add("botCode", player.getCode());
+        data.add("user_id", player.getId().toString());
+        data.add("bot_code", player.getCode());
         data.add("input", getInput(player));
         WebSocketServer.restTemplate.postForObject(addBotUrl, data, String.class);
 
