@@ -3,6 +3,7 @@ import NotFound from '../views/error/NotFound.vue'
 import PkIndexView from '../views/pk/PkIndexView.vue'
 import RankListView from '../views/ranklist/RankListView.vue'
 import RecordView from '../views/record/RecordView.vue'
+import RecordContent from '@/views/record/RecordContent.vue'
 import UserBotView from '../views/user/mybot/UserBotView.vue'
 import UserAccountLogin from '@/views/user/account/UserAccountLogin.vue'
 import UserAccountRegister from '@/views/user/account/UserAccountRegister.vue'
@@ -40,6 +41,15 @@ const routes = [
     path:"/record/",
     name:"record_index",
     component:RecordView,
+    meta:{
+      requestAuth:true
+    }
+  },
+
+  {
+    path:"/record/:recordId/",
+    name:"record_content",
+    component:RecordContent,
     meta:{
       requestAuth:true
     }

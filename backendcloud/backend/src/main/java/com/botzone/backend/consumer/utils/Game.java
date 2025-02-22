@@ -3,6 +3,7 @@ package com.botzone.backend.consumer.utils;
 import com.alibaba.fastjson2.JSONObject;
 import com.botzone.backend.consumer.WebSocketServer;
 import com.botzone.backend.pojo.Record;
+import com.botzone.backend.pojo.User;
 import com.botzone.backend.pojo.bot;
 import org.springframework.security.core.parameters.P;
 import org.springframework.util.LinkedMultiValueMap;
@@ -203,7 +204,25 @@ public class Game extends Thread {
         return sb.toString();
     }
 
+    private void updateUserRating(Player player, Integer rating){
+        User user = WebSocketServer.userMapper.selectById(player.getId());
+        user.setRating(rating);
+        WebSocketServer.userMapper.updateById(user);
+    }
+
     private void saveRecord(){
+        Integer ratingA = WebSocketServer.userMapper.selectById(playerA.getId()).getRating();
+        Integer ratingB = WebSocketServer.userMapper.selectById(playerB.getId()).getRating();
+        if ("A".equals(loser)) {
+            ratingA -= 5;
+            ratingB += 5;
+        } else if ("B".equals(loser)) {
+            ratingB -= 5;
+            ratingA += 5;
+        }
+        updateUserRating(playerA, ratingA);
+        updateUserRating(playerB, ratingB);
+
         Record record = new Record(
                 null,
                 playerA.getId(),
