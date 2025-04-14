@@ -213,6 +213,7 @@ public class Game extends Thread {
     private void saveRecord(){
         Integer ratingA = WebSocketServer.userMapper.selectById(playerA.getId()).getRating();
         Integer ratingB = WebSocketServer.userMapper.selectById(playerB.getId()).getRating();
+        System.out.println(ratingA);
         if ("A".equals(loser)) {
             ratingA -= 5;
             ratingB += 5;

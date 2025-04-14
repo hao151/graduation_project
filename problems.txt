@@ -2,23 +2,34 @@
 蛇移动拐角 + 欧几里得距离theta角
 连通性
 动画帧gameobject
-判断能不能走放在Map里
 蛇丰满
+------------------地图创建
+
+
+匹配（异步   http---websocket   cs --- 对等连接  new一个类发送到matching server
+-匹配算法,FCFS，（elo机制扩展）
+------------------匹配
+地图从后端(逻辑判输判赢)生成发送到前端
+地图状态同步(移动时)  客户端把指令传给服务器，服务器再同步给客户端
+αβ剪枝搜索
+人与机器指令冲突处理
+代码评测队列—锁  sleep join
+--------------对战
+
+
 pojo mapper(dao）service controller
-springboot 和client 通信（打开网页） 4.1    1'09'
 通过数据库判断user&password   1'23
 JWT工作原理 vs SessionID   access refresh
 公开url，登录url---安全机制放行
 securityconfig 版本
 token放到localstory中防止刷新退出 ：登陆状态持久化
 前端页面授权--没有登陆的话定向到登陆界面 before-each     27'33
-代码编辑器
-匹配（异步   http---websocket   cs --- 对等连接  new一个类发送到matching server
-地图从后端(逻辑判输判赢)生成发送到前端
-αβ剪枝搜索
-地图状态同步(移动时)  客户端把指令传给服务器，服务器再同步给客户端
-匹配算法,FCFS，（elo机制扩展）
-处理users.getid前要判空，防止刷新退出缓存仍保留信息
-人与机器指令冲突处理
 游戏信息编码为字符串及二维数组缺点 
-代码评测队列—锁  sleep join
+录像保存操作
+代码编辑器
+---------------------信息管理
+
+
+处理users.getid前要判空，防止刷新退出缓存仍保留信息
+springboot 和client 通信（打开网页） 4.1    1'09'
+
