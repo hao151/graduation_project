@@ -6,13 +6,15 @@ import java.util.List;
 public class Bot implements com.botzone.botrunningsystem.utils.BotInterface {
     static class Cell {
         public int x, y;
+
         public Cell(int x, int y) {
             this.x = x;
             this.y = y;
         }
     }
+
     private boolean check_tail_increasing(int step) {  // 检验当前回合，蛇的长度是否增加
-        if (step <= 6 ) return true;
+        if (step <= 6) return true;
         return step % 3 == 0;
     }
 
@@ -25,12 +27,12 @@ public class Bot implements com.botzone.botrunningsystem.utils.BotInterface {
         int x = sx, y = sy;
         int step = 0;
         res.add(new Cell(x, y));
-        for (int i = 0; i < steps.length(); i ++ ) {
+        for (int i = 0; i < steps.length(); i++) {
             int d = steps.charAt(i) - '0';
             x += dx[d];
             y += dy[d];
             res.add(new Cell(x, y));
-            if (!check_tail_increasing( ++ step)) {
+            if (!check_tail_increasing(++step)) {
                 res.remove(0);
             }
         }
@@ -47,8 +49,8 @@ public class Bot implements com.botzone.botrunningsystem.utils.BotInterface {
 
         //g为地图，0为可走空地，1为不可走障碍物
         int[][] g = new int[13][14];
-        for (int i = 0, k = 0; i < 13; i ++ ) {
-            for (int j = 0; j < 14; j ++, k ++ ) {
+        for (int i = 0, k = 0; i < 13; i++) {
+            for (int j = 0; j < 14; j++, k++) {
                 if (strs[0].charAt(k) == '1') {
                     g[i][j] = 1;
                 }
@@ -61,19 +63,61 @@ public class Bot implements com.botzone.botrunningsystem.utils.BotInterface {
         List<Cell> aCells = getCells(aSx, aSy, strs[3]); //贪吃蛇a的身体
         List<Cell> bCells = getCells(bSx, bSy, strs[6]); //贪吃蛇b的身体
 
-        for (Cell c: aCells) g[c.x][c.y] = 1;
-        for (Cell c: bCells) g[c.x][c.y] = 1;    // 将蛇的身体在地图中标识出来
+        for (Cell c : aCells) g[c.x][c.y] = 1;
+        for (Cell c : bCells) g[c.x][c.y] = 1;    // 将蛇的身体在地图中标识出来
 
         //Your Code Here
         int[] dx = {-1, 0, 1, 0}, dy = {0, 1, 0, -1};
-        for (int i = 0; i < 4; i ++ ) {
+        int [][] backup = new int[13][14];
+        for (int i = 0; i < 13; i++)
+            for (int j = 0; j < 14; j++)
+                backup[i][j] = g[i][j];
+        this.SetObstacle(backup, bCells.get(bCells.size() - 1));
+        int grass_max = 0;
+        int best_direction = 0;
+        for (int i = 0; i < 4; i++) {
             int x = aCells.get(aCells.size() - 1).x + dx[i];
             int y = aCells.get(aCells.size() - 1).y + dy[i];
-            if (x >= 0 && x < 13 && y >= 0 && y < 14 && g[x][y] == 0) {
-                return i;
+            if (x >= 0 && x < 13 && y >= 0 && y < 14 && backup[x][y] == 0) {
+                for (int k = 0; k < 20; k ++ )
+                    for (int j = 0; j < 20; j++)
+                        st[k][j] = false;
+                int current_grass = this.GrassCount(backup, x, y);
+                if (current_grass > grass_max) {
+                    grass_max = current_grass;
+                    best_direction = i;
+                }
             }
         }
+        return best_direction;
+    }
 
-        return 0;
+    private void SetObstacle(int[][] map, Cell rival) {
+        int[] dx = {-1, 0, 1, 0}, dy = {0, 1, 0, -1};
+        for (int i = 0; i < 4; i++) {
+            int x = rival.x + dx[i];
+            int y = rival.y + dy[i];
+            if (x >= 0 && x < 13 && y >= 0 && y < 14 && map[x][y] == 0) {
+                map[x][y] = 1;
+            }
+        }
+    }
+    boolean [][]st = new boolean[20][20];
+
+    private int GrassCount(int[][] map, int x, int y) {
+        int [] dx = {-1, 0, 1, 0}, dy = {0, 1, 0, -1};
+        st[x][y] = true;
+        int count = 1;
+        for (int i = 0; i < 4; i++) {
+            int nextX = x + dx[i];
+            int nextY = y + dy[i];
+            if (nextX < 0 || nextX > 13 || nextY < 0 || nextY > 14) continue;
+            if (map[nextX][nextY] == 1) continue;
+            if (st[nextX][nextY]) continue;
+            st[nextX][nextY] = true;
+            count += GrassCount(map, nextX, nextY);
+        }
+        return count;
     }
 }
+
